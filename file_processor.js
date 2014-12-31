@@ -49,6 +49,9 @@ var FileProcessor = {
       return processedInfo.content = fs.readFileSync(exceptions.replacement).toString();
     }
 
+    if (exceptions.imports)
+      processedInfo.imports = exceptions.imports;
+
     var isRoot = pkg === this.ROOT_PACKAGE;
 
     try {

@@ -33,6 +33,13 @@ var Generator = function (targetPath) {
     skipFiles: ['startup_client.js']
   });
 
+  FileProcessor.exceptionFor('spacebars', {
+    imports: {
+      'tracker': 'Tracker'
+    }
+  });
+
+
 
   var Meteor = require('./meteor');
   var spawn = require('./spawn');
@@ -57,7 +64,6 @@ var Generator = function (targetPath) {
   // Ensure project is not existing
   start('Cleaning Up');
   spawn('rm -rf "' + TMP_PATH + '"*');
-  spawn('rm -rf "' + targetPath + '/"*');
   done();
 
 
@@ -86,7 +92,9 @@ var Generator = function (targetPath) {
 
   start('Writing Files');
   var fs = require('fs');
-  fs.mkdirSync(targetPath + '/' + FileProcessor.ROOT_PACKAGE);
+  try {
+    fs.mkdirSync(targetPath + '/' + FileProcessor.ROOT_PACKAGE);
+  } catch(e) {}
   var files = fs.readdirSync(PACKAGES_PATH);
 
   files.forEach(function (file) {
