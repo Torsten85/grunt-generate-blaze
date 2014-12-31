@@ -1,5 +1,5 @@
 {
-  "name": "blaze-generator",
+  "name": "grunt-generate-blaze",
   "version": "1.0.0",
   "main": "generator.js",
   "scripts": {
