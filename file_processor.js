@@ -178,11 +178,11 @@ var FileProcessor = {
     if (exceptions.skipFiles) {
       exceptions.skipFiles.forEach(function (file) {
 
-        var regExp = new RegExp('\\(function \\(\\) {( |\/|\n)+packages\/' + pkg + '\/' + file + '(.|\n)+( |\/|\n)}\\).call\\(this\\);\n');
+        var regExp = new RegExp('\\(function \\(\\) {( |\/|\n)+packages\/' + pkg + '\/' + file + '(.|\n)+?( |\/|\n)}\\).call\\(this\\);\n');
         content = content.replace(regExp, '');
 
-      })
-    processedInfo.content = content;;
+      });
+    processedInfo.content = content;
     }
 
     return content;
