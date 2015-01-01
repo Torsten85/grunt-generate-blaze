@@ -17,7 +17,7 @@ var FileProcessor = {
   },
 
   shouldProcess: function (path) {
-    if (path.indexOf('map') === path.length - 3)
+    if (path.lastIndexOf('map') === path.length - 3)
       return false;
 
 
