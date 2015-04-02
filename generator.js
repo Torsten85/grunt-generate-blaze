@@ -33,14 +33,6 @@ var Generator = function (targetPath) {
     skipFiles: ['startup_client.js']
   });
 
-  FileProcessor.exceptionFor('spacebars', {
-    imports: {
-      'tracker': 'Tracker'
-    }
-  });
-
-
-
   var Meteor = require('./meteor');
   var spawn = require('./spawn');
 
