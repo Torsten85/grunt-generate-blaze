@@ -1,7 +1,7 @@
 var Generator = function (targetPath) {
 
   var FileProcessor = require('./file_processor');
-  FileProcessor.SKIP_PACKAGES = ['deps', 'underscore', 'jquery', 'autopublish', 'insecure', 'json'];
+  FileProcessor.SKIP_PACKAGES = ['deps', 'underscore', 'jquery', 'autopublish', 'insecure', 'json', 'global-imports', 'minifiers', 'ddp'];
   FileProcessor.ROOT_PACKAGE = 'blaze';
 
   FileProcessor.exceptionFor('minimongo', {
@@ -30,7 +30,11 @@ var Generator = function (targetPath) {
   });
 
   FileProcessor.exceptionFor('meteor', {
-    skipFiles: ['startup_client.js']
+    skipFiles: ['startup_client.js'],
+    imports: {
+      'jquery': ['jQuery']
+    },
+    addContent: 'Meteor.startup = function (fct) { jQuery(fct); };'
   });
 
   var Meteor = require('./meteor');
@@ -55,9 +59,9 @@ var Generator = function (targetPath) {
 
   // Ensure project is not existing
   start('Cleaning Up');
+  spawn('rm -rf "' + targetPath + '/*"');
   spawn('rm -rf "' + TMP_PATH + '"*');
   done();
-
 
   // Create project
   start('Creating temporary project');

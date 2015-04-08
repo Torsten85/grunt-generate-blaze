@@ -1,27 +1,38 @@
+function generate(grunt, generatorName, packageName) {
+  var fs = require('fs');
+  var Generator = require(generatorName);
+
+  var options = this.options();
+  var target = options.target;
+
+  if (!target) {
+    try {
+      var bowerrc = fs.readFileSync('.bowerrc').toString();
+      target = JSON.parse(bowerrc).directory;
+    } catch(e) {}
+
+    if (!target)
+      target = 'bower_components/';
+
+    target += packageName;
+  }
+
+  new Generator(target);
+  grunt.log.writeln('All Done');
+}
+
 module.exports = function (grunt) {
 
 
   grunt.registerTask('generateBlaze', 'Generates Blaze', function () {
-    var fs = require('fs');
-    var Generator = require('../generator');
 
-    var options = this.options();
-    var target = options.target;
+    generate.call(this, grunt, '../generator', 'blaze');
 
-    if (!target) {
-      try {
-        var bowerrc = fs.readFileSync('.bowerrc').toString();
-        target = JSON.parse(bowerrc).directory;
-      } catch(e) {}
+  });
 
-      if (!target)
-        target = 'bower_components/';
+  grunt.registerTask('generateIronRouter', 'Generates Iron Router', function () {
 
-      target += 'blaze';
-    }
-
-    new Generator(target);
-    grunt.log.writeln('All Done');
+    generate.call(this, grunt, '../iron_generator', 'iron_router');
 
   });
 
