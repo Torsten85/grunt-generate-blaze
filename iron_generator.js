@@ -152,6 +152,10 @@ var Generator = function (targetPath) {
       }, {
         pattern: /Router\.routes\[routeName]/g,
         replace: 'window.Router.routes[routeName]'
+      },
+      {
+        pattern: 'if (router.options.autoStart !== false)',
+        replace: 'if (router.options.autoStart === true)'
       }
     ],
     exports: ['RouteController', {'Router': 'Iron.Router'}]
