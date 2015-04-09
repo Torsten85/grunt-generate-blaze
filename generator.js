@@ -31,10 +31,7 @@ var Generator = function (targetPath) {
 
   FileProcessor.exceptionFor('meteor', {
     skipFiles: ['startup_client.js'],
-    imports: {
-      'jquery': ['jQuery']
-    },
-    addContent: 'Meteor.startup = function (fct) { jQuery(fct); };'
+    addContent: 'Meteor.startup = function (fct) { fct(); };'
   });
 
   var Meteor = require('./meteor');
