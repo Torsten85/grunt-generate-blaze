@@ -35,6 +35,10 @@ var Generator = function (targetPath) {
     requirePath: 'jquery'
   });
 
+  FileProcessor.exceptionFor('spacebars', {
+    requirePath: 'blaze/spacebars'
+  });
+
   FileProcessor.exceptionFor('tracker', {
     requirePath: 'blaze/tracker',
     shyExports: ['Deps']
@@ -133,6 +137,7 @@ var Generator = function (targetPath) {
   FileProcessor.exceptionFor('iron:router', {
     skipFiles: ['lib/global_router.js'],
     imports: {
+      'spacebars': ['Spacebars'],
       'iron:core': [],
       'iron:layout': [],
       'iron:middleware-stack': [],
