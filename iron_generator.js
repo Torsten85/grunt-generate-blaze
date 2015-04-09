@@ -31,6 +31,10 @@ var Generator = function (targetPath) {
     requirePath: 'underscore'
   });
 
+  FileProcessor.exceptionFor('jquery', {
+    requirePath: 'jquery'
+  });
+
   FileProcessor.exceptionFor('tracker', {
     requirePath: 'blaze/tracker',
     shyExports: ['Deps']
