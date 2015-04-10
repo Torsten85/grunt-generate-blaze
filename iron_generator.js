@@ -77,7 +77,13 @@ var Generator = function (targetPath) {
   });
 
   FileProcessor.exceptionFor('iron:core', {
-    skipFiles: ['lib/version_conflict_error.js']
+    skipFiles: ['lib/version_conflict_error.js'],
+    replace: [
+      {
+        pattern: 'Iron.utils.global.Iron = Iron;',
+        replace: ''
+      }
+    ]
   });
 
   FileProcessor.exceptionFor('iron:dynamic-template', {
@@ -135,7 +141,6 @@ var Generator = function (targetPath) {
 
 
   FileProcessor.exceptionFor('iron:router', {
-    skipFiles: ['lib/global_router.js'],
     imports: {
       'spacebars': ['Spacebars'],
       'iron:core': [],
@@ -149,16 +154,14 @@ var Generator = function (targetPath) {
       {
         pattern: /UI\.registerHelper/g,
         replace: 'Template.registerHelper'
-      }, {
-        pattern: /Router\.routes\[routeName]/g,
-        replace: 'window.Router.routes[routeName]'
       },
       {
         pattern: 'if (router.options.autoStart !== false)',
         replace: 'if (router.options.autoStart === true)'
       }
     ],
-    exports: ['RouteController', {'Router': 'Iron.Router'}]
+    addContent: 'Iron.currentRouter = Router;',
+    exports: ['Iron']
   });
 
   var Meteor = require('./meteor');
@@ -213,9 +216,6 @@ var Generator = function (targetPath) {
 
   start('Writing Files');
   var fs = require('fs');
-  try {
-    fs.mkdirSync(targetPath + '/' + FileProcessor.ROOT_PACKAGE.replace(':', '_'));
-  } catch(e) {}
   var files = fs.readdirSync(PACKAGES_PATH);
 
   files.forEach(function (file) {
@@ -224,12 +224,7 @@ var Generator = function (targetPath) {
     var processedFile = FileProcessor.process(path);
     if (processedFile !== null) {
       var pkg = FileProcessor.getPackageNameFromPath(path);
-      if (pkg.indexOf(':') > 0) {
-        try {
-          fs.mkdirSync(targetPath + '/' + FileProcessor.ROOT_PACKAGE.replace(':', '_') + '/' + pkg.split(':')[0])
-        } catch(e) {}
-      }
-      var filename = pkg === FileProcessor.ROOT_PACKAGE ? targetPath + '/' + pkg.replace(':', '_') + '.js' : targetPath + '/' + FileProcessor.ROOT_PACKAGE.replace(':', '_') + '/' + pkg.replace(':', '/') + '.js';
+      var filename = pkg === FileProcessor.ROOT_PACKAGE ? targetPath + '/main.js' : targetPath + '/' + pkg.replace(':', '_') + '.js';
       fs.writeFileSync(filename, processedFile);
     }
 

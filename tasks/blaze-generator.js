@@ -32,7 +32,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('generateIronRouter', 'Generates Iron Router', function () {
 
-    generate.call(this, grunt, '../iron_generator', 'iron_router');
+    generate.call(this, grunt, '../iron_generator', 'iron');
 
   });
 

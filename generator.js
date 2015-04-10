@@ -85,9 +85,6 @@ var Generator = function (targetPath) {
 
   start('Writing Files');
   var fs = require('fs');
-  try {
-    fs.mkdirSync(targetPath + '/' + FileProcessor.ROOT_PACKAGE);
-  } catch(e) {}
   var files = fs.readdirSync(PACKAGES_PATH);
 
   files.forEach(function (file) {
@@ -96,7 +93,7 @@ var Generator = function (targetPath) {
     var processedFile = FileProcessor.process(path);
     if (processedFile !== null) {
       var pkg = FileProcessor.getPackageNameFromPath(path);
-      var filename = pkg === FileProcessor.ROOT_PACKAGE ? targetPath + '/' + pkg + '.js' : targetPath + '/' + FileProcessor.ROOT_PACKAGE + '/' + pkg + '.js';
+      var filename = pkg === FileProcessor.ROOT_PACKAGE ? targetPath + '/main.js' : targetPath + '/' + pkg + '.js';
       fs.writeFileSync(filename, processedFile);
     }
 

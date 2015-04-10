@@ -63,9 +63,6 @@ var FileProcessor = {
     if (exceptions.shyExports)
       processedInfo.shyExports = exceptions.shyExports;
 
-    var isRoot = pkg === this.ROOT_PACKAGE;
-    var namespace = pkg.indexOf(':') !== -1 ? pkg.split(':')[0] : false;
-
     try {
       var content = fs.readFileSync(path).toString();
     } catch(e) {
@@ -141,15 +138,7 @@ var FileProcessor = {
         if (!this._processed[pkg])
           continue;
 
-        var reqPath;
-        if (isRoot)
-          reqPath = './' + this.ROOT_PACKAGE + '/' + pkg.replace(':', '/');
-        else if (pkg.indexOf(':') !== -1 && pkg.split(':')[0] === namespace)
-          reqPath = './' + pkg.split(':')[1];
-        else if (pkg === this.ROOT_PACKAGE || namespace !== false)
-          reqPath = '../' + pkg;
-        else
-          reqPath = './' + pkg;
+        var reqPath = './' + pkg;
 
         reqPath = reqPath.replace(':', '_');
 
