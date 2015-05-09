@@ -7,10 +7,21 @@ var FileProcessor = {
 
   _processed: {},
   _exceptions: {},
-
+  _additions: [],
 
   exceptionFor: function (pkg, exceptions) {
     this._exceptions[pkg] = exceptions;
+  },
+
+  addFile: function (name, config) {
+    this._additions.push({
+      filename: name,
+      content: fs.readFileSync(config.content)
+    });
+  },
+
+  getAdditions: function () {
+    return this._additions;
   },
 
   getPackageNameFromPath: function (path) {
@@ -125,7 +136,11 @@ var FileProcessor = {
         var pkgExceptions = this._exceptions[pkg] || {};
 
         if (pkgExceptions.requirePath) {
-          imports.push('var ' + imp[0] + " = require('" + pkgExceptions.requirePath + "');");
+          if (pkgExceptions.requirePath.indexOf('require') === 0) {
+            imports.push('var ' + imp[0] + " = require(" + pkgExceptions.requirePath + ");");
+          } else {
+            imports.push('var ' + imp[0] + " = require('" + pkgExceptions.requirePath + "');");
+          }
           if (Array.isArray(pkgExceptions.shyExports)) {
             pkgExceptions.shyExports.forEach(function (exp) {
               if (exp !== imp[0])

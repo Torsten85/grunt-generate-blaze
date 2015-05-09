@@ -5,12 +5,13 @@ var Generator = function (targetPath) {
   FileProcessor.ROOT_PACKAGE = 'blaze';
 
   FileProcessor.exceptionFor('minimongo', {
-    exports: ['LocalCollection'],
-    replacement: __dirname + '/replacement/minimongo.js'
+    exports: ['LocalCollection']
   });
 
   FileProcessor.exceptionFor('blaze', {
-    exports: ['Blaze']
+    exports: ['Blaze'],
+    requirePath: './main',
+    shyExports: ['UI', 'Handlebars']
   });
 
   FileProcessor.exceptionFor('ejson', {
@@ -32,6 +33,10 @@ var Generator = function (targetPath) {
   FileProcessor.exceptionFor('meteor', {
     skipFiles: ['startup_client.js'],
     addContent: 'Meteor.startup = function (fct) { fct(); };'
+  });
+
+  FileProcessor.addFile('minimongo_mock', {
+    content: __dirname + '/additions/minimongo.js'
   });
 
   var Meteor = require('./meteor');
@@ -98,6 +103,12 @@ var Generator = function (targetPath) {
     }
 
   });
+
+  FileProcessor.getAdditions().forEach(function (addition) {
+    console.log(targetPath + '/' + addition.filename + '.js');
+    fs.writeFileSync(targetPath + '/' + addition.filename + '.js', addition.content);
+  });
+
   done();
 };
 
